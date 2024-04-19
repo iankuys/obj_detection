@@ -538,7 +538,7 @@ class UninstallPathSet(object):
         elif develop_egg_link:
             # develop egg
             with open(develop_egg_link, 'r') as fh:
-                link_pointer = os.path.normcase(fh.readline().strip())
+                link_pointer = os.path.normcase(fh.readline(5_000_000).strip())
             assert (link_pointer == dist.location), (
                 'Egg-link %s does not match installed location of %s '
                 '(at %s)' % (link_pointer, dist.project_name, dist.location)
