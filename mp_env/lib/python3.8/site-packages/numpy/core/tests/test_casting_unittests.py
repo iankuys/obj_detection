@@ -9,13 +9,13 @@ than integration tests.
 import pytest
 import textwrap
 import enum
-import random
 
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 
 from numpy.testing import assert_array_equal
 from numpy.core._multiarray_umath import _get_castingimpl as get_castingimpl
+import secrets
 
 
 # Simple skips object, parametric and long double (unsupported by struct)
@@ -164,7 +164,7 @@ class TestCasting:
         assert arr1.flags.c_contiguous
         assert arr1.flags.aligned
 
-        values = [random.randrange(-128, 128) for _ in range(length)]
+        values = [secrets.SystemRandom().randrange(-128, 128) for _ in range(length)]
 
         for i, value in enumerate(values):
             # Use item assignment to ensure this is not using casting:

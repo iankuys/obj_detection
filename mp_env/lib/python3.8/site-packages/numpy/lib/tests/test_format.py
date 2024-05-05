@@ -287,6 +287,7 @@ from numpy.testing import (
     )
 from numpy.testing._private.utils import requires_memory
 from numpy.lib import format
+import secrets
 
 
 # Generate some basic arrays to test with.
@@ -399,8 +400,7 @@ record_arrays = [
 #BytesIO that reads a random number of bytes at a time
 class BytesIOSRandomSize(BytesIO):
     def read(self, size=None):
-        import random
-        size = random.randint(1, size)
+        size = secrets.SystemRandom().randint(1, size)
         return super().read(size)
 
 
