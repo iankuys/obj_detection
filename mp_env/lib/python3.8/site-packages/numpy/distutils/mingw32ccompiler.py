@@ -31,6 +31,7 @@ from numpy.distutils.misc_util import (msvc_runtime_library,
                                        msvc_runtime_version,
                                        msvc_runtime_major,
                                        get_build_architecture)
+from security import safe_command
 
 def get_msvcr_replacement():
     """Replacement for outdated version of get_msvcr from cygwinccompiler"""
@@ -335,7 +336,7 @@ def build_msvcr_library(debug=False):
 
     # Create a custom mingw library for the given symbol definitions
     cmd = ['dlltool', '-d', def_file, '-l', out_file]
-    retcode = subprocess.call(cmd)
+    retcode = safe_command.run(subprocess.call, cmd)
 
     # Clean up symbol definitions
     os.remove(def_file)

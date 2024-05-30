@@ -11,6 +11,7 @@ from subprocess import Popen, PIPE, STDOUT
 from numpy.distutils.exec_command import filepath_from_subprocess_output
 from numpy.distutils.fcompiler import FCompiler
 from distutils.version import LooseVersion
+from security import safe_command
 
 compilers = ['GnuFCompiler', 'Gnu95FCompiler']
 
@@ -382,8 +383,7 @@ class Gnu95FCompiler(GnuFCompiler):
 
     def get_target(self):
         try:
-            p = subprocess.Popen(
-                self.compiler_f77 + ['-v'],
+            p = safe_command.run(subprocess.Popen, self.compiler_f77 + ['-v'],
                 stdin=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
@@ -533,7 +533,7 @@ def _can_target(cmd, arch):
         output = os.path.splitext(filename)[0] + ".o"
         try:
             newcmd.extend(["-arch", arch, "-c", filename])
-            p = Popen(newcmd, stderr=STDOUT, stdout=PIPE, cwd=d)
+            p = safe_command.run(Popen, newcmd, stderr=STDOUT, stdout=PIPE, cwd=d)
             p.communicate()
             return p.returncode == 0
         finally:

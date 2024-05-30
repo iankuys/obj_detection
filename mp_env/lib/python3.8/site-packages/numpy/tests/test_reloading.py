@@ -5,6 +5,7 @@ import sys
 import subprocess
 import textwrap
 from importlib import reload
+from security import safe_command
 
 
 def test_numpy_reloading():
@@ -57,7 +58,7 @@ def test_full_reimport():
         with warns(UserWarning):
             import numpy as np
         """)
-    p = subprocess.run([sys.executable, '-c', code], capture_output=True)
+    p = safe_command.run(subprocess.run, [sys.executable, '-c', code], capture_output=True)
     if p.returncode:
         raise AssertionError(
             f"Non-zero return code: {p.returncode!r}\n\n{p.stderr.decode()}"

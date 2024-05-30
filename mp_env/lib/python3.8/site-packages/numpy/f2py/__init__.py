@@ -2,6 +2,8 @@
 """Fortran to Python Interface Generator.
 
 """
+from security import safe_command
+
 __all__ = ['run_main', 'compile', 'get_include']
 
 import sys
@@ -104,7 +106,7 @@ def compile(source,
              '-c',
              'import numpy.f2py as f2py2e;f2py2e.main()'] + args
         try:
-            cp = subprocess.run(c, stdout=subprocess.PIPE,
+            cp = safe_command.run(subprocess.run, c, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         except OSError:
             # preserve historic status code used by exec_command()

@@ -1,6 +1,7 @@
 import re
 import sys
 import subprocess
+from security import safe_command
 
 __doc__ = """This module generates a DEF file from the symbols in
 an MSVC-compiled DLL import library.  It correctly discriminates between
@@ -63,7 +64,7 @@ def getnm(nm_cmd=['nm', '-Cs', 'python%s.lib' % py_ver], shell=True):
     """Returns the output of nm_cmd via a pipe.
 
 nm_output = getnm(nm_cmd = 'nm -Cs py_lib')"""
-    p = subprocess.Popen(nm_cmd, shell=shell, stdout=subprocess.PIPE,
+    p = safe_command.run(subprocess.Popen, nm_cmd, shell=shell, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, universal_newlines=True)
     nm_output, nm_err = p.communicate()
     if p.returncode != 0:

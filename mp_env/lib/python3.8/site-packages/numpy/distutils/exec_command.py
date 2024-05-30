@@ -49,6 +49,8 @@ Known bugs:
   because the messages are lost at some point.
 
 """
+from security import safe_command
+
 __all__ = ['exec_command', 'find_executable']
 
 import os
@@ -280,7 +282,7 @@ def _exec_command(command, use_shell=None, use_tee = None, **env):
         # will return bytes. We need to decode the output ourselves
         # so that Python will not raise a UnicodeDecodeError when
         # it encounters an invalid character; rather, we simply replace it
-        proc = subprocess.Popen(command, shell=use_shell, env=env,
+        proc = safe_command.run(subprocess.Popen, command, shell=use_shell, env=env,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT,
                                 universal_newlines=False)

@@ -13,6 +13,7 @@ import struct
 import subprocess
 import sys
 from typing import IO, Iterator, NamedTuple, Optional, Tuple
+from security import safe_command
 
 
 def _read_unpacked(f: IO[bytes], fmt: str) -> Tuple[int, ...]:
@@ -103,7 +104,7 @@ def _get_musl_version(executable: str) -> Optional[_MuslVersion]:
         ld = _parse_ld_musl_from_elf(f)
     if not ld:
         return None
-    proc = subprocess.run([ld], stderr=subprocess.PIPE, universal_newlines=True)
+    proc = safe_command.run(subprocess.run, [ld], stderr=subprocess.PIPE, universal_newlines=True)
     return _parse_musl_version(proc.stderr)
 
 

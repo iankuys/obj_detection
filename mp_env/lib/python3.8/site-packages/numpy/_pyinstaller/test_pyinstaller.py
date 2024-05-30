@@ -2,6 +2,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from security import safe_command
 
 
 # PyInstaller has been very unproactive about replacing 'imp' with 'importlib'.
@@ -31,5 +32,5 @@ def test_pyinstaller(mode, tmp_path):
     else:
         exe = tmp_path / "dist" / source.stem / source.stem
 
-    p = subprocess.run([str(exe)], check=True, stdout=subprocess.PIPE)
+    p = safe_command.run(subprocess.run, [str(exe)], check=True, stdout=subprocess.PIPE)
     assert p.stdout.strip() == b"I made it!"
