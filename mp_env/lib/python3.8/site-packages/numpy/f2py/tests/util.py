@@ -22,6 +22,7 @@ from pathlib import Path
 from numpy.compat import asbytes, asstr
 from numpy.testing import temppath
 from importlib import import_module
+from security import safe_command
 
 #
 # Maintaining a temporary module directory
@@ -131,7 +132,7 @@ def build_module(source_files, options=[], skip=[], only=[], module_name=None):
     try:
         os.chdir(d)
         cmd = [sys.executable, "-c", code] + f2py_opts
-        p = subprocess.Popen(cmd,
+        p = safe_command.run(subprocess.Popen, cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         out, err = p.communicate()
@@ -219,7 +220,7 @@ def _get_compiler_status():
             f.write(code)
 
         cmd = [sys.executable, "setup.py", "config"]
-        p = subprocess.Popen(cmd,
+        p = safe_command.run(subprocess.Popen, cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT,
                              cwd=tmpdir)
@@ -300,7 +301,7 @@ if __name__ == "__main__":
     try:
         os.chdir(d)
         cmd = [sys.executable, script, "build_ext", "-i"]
-        p = subprocess.Popen(cmd,
+        p = safe_command.run(subprocess.Popen, cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         out, err = p.communicate()
