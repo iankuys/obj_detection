@@ -1,6 +1,6 @@
 # obj_detection using yolov5
 
-## requires conda and pytorch so please install those packages
+requires conda and pytorch so please install those packages
 
 ### please install these packages
 ```
